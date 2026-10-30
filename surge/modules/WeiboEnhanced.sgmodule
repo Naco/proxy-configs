@@ -1,0 +1,21 @@
+#!name=微博净化[墨鱼版] Surge 转换版
+#!desc=原作者 @ddgksf2013；保留微博净化、界面调整及本地设置页。需启用 MITM 并信任证书。
+
+# 原配置：https://ddgksf2013.top/rewrite/WeiboEnhanced.conf
+# 原脚本及功能作者：@ddgksf2013；原配置贡献者：@zmqcherish
+# 转换日期：2026-10-30（中国标准时间）
+# 转换基线：配置 V0.1.21 / 脚本 0.1.52
+# 原脚本自带 Surge 运行时适配，本模块只转换规则，不修改作者脚本。
+# 设置页：https://api.weibo.cn/__qx_weibo_settings__/
+# 原脚本远程更新，后续内容及行为可能随作者更新变化。
+
+[Script]
+WeiboEnhanced-settings-read = type=http-request, pattern=^https://api\.weibo\.cn/__qx_weibo_settings__/(?:api/config)?(?=[?#]|$), requires-body=false, timeout=10, script-path=https://ddgksf2013.top/scripts/weibo_json.js, script-update-interval=86400
+WeiboEnhanced-settings-write = type=http-request, pattern=^https://api\.weibo\.cn/__qx_weibo_settings__/api/(?:save|reset)(?=[?#]|$), requires-body=true, max-size=1048576, timeout=10, script-path=https://ddgksf2013.top/scripts/weibo_json.js, script-update-interval=86400
+WeiboEnhanced-api = type=http-response, pattern=^https?://api\.weibo\.cn(?:/2/statuses/container_timeline_hot|/2/guest/container_timeline_hot|/2/statuses/container_timeline_unread|/2/statuses/container_timeline|/2/live/media_homelist|/2/remind/hometab_dot|/2/remind/unread_count|/2/statuses/container_detail|/2/statuses/container_detail_comment|/2/comments/build_comments|/2/search/finder|/2/search/container_timeline|/2/search/container_discover|/2/!/was/finder/searchbarchange|/2/cardlist|/2/searchall|/2/profile/me|/2/profile/container_timeline|/2/video/flow_stream|/2/video/flow_stream_cache|/2/push/daily|/2/push/active|/2/guest/push_active|/2/groups/allgroups/v2|/2/client/abserver_list|/2/checkin/show|/2/video/remind_info|/2/video/home_channels)(?=[?#]|$), requires-body=true, max-size=5242880, timeout=10, script-path=https://ddgksf2013.top/scripts/weibo_json.js, script-update-interval=86400
+WeiboEnhanced-boot-preload = type=http-response, pattern=^https?://bootpreload\.uve\.weibo\.com(?:/v2/ad/preload)(?=[?#]|$), requires-body=true, max-size=5242880, timeout=10, script-path=https://ddgksf2013.top/scripts/weibo_json.js, script-update-interval=86400
+WeiboEnhanced-boot-realtime = type=http-response, pattern=^https?://bootrealtime\.uve\.weibo\.com(?:/v3/ad/realtime)(?=[?#]|$), requires-body=true, max-size=5242880, timeout=10, script-path=https://ddgksf2013.top/scripts/weibo_json.js, script-update-interval=86400
+WeiboEnhanced-boot-lua = type=http-response, pattern=^https?://wbapp\.uve\.weibo\.com(?:/wbapplua/wbpullad\.lua)(?=[?#]|$), requires-body=true, max-size=5242880, timeout=10, script-path=https://ddgksf2013.top/scripts/weibo_json.js, script-update-interval=86400
+
+[MITM]
+hostname = %APPEND% api.weibo.cn, bootpreload.uve.weibo.com, bootrealtime.uve.weibo.com, wbapp.uve.weibo.com

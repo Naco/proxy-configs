@@ -1,0 +1,15 @@
+# 本地缓存与敏感文件
+.DS_Store
+Thumbs.db
+node_modules/
+work/
+local/
+.private/
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+*.log
